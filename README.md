@@ -1,5 +1,5 @@
 # StyleDetector
-This repository contains all the files that were used for our AI project 'Style Detector'.
+This repository contains all the files that were used for our AI project 'Style Detector'. All the files are inside the portolio folder.
 
 The model we used for classification could not be uploaded due to GIT restrictions. This project allows a user to input an image from their PC or take an image using their webcam, which is then preprocessed and sent to the model for classification. Once, the image has been successfully classified, keywords are generated that closely resemble their current clothing style, and then GOOGLE API is used to provide smart clothing recommendations. This allows a user to get clothing items such as tops, pants, and jackets that closely resemble their current style without the need to spend a lot of time browsing online. They can easily get through to different sites where they can buy related clothing items.
 
