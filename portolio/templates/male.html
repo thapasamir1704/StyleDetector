@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <meta content="description" name="description">
+  <meta name="google" content="notranslate" />
+  <meta content="Mashup templates have been developed by Orson.io team" name="author">
+
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="../static/assets/apple-icon-180x180.png">
+
+  <link rel="shortcut icon" href="/static/bat.ico">
+
+  <title>Recommendations</title>
+
+  <link href="../static/main.3f6952e4.css" rel="stylesheet">
+</head>
+
+<body class="" style="background-color: #F5DEB3;">
+  <div id="site-border-left"></div>
+  <div id="site-border-right"></div>
+  <div id="site-border-top"></div>
+  <div id="site-border-bottom"></div>
+
+  <!-- Add your content of header -->
+  <header>
+    <nav class="navbar navbar-fixed-top navbar-default">
+      <div class="container">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="./index.html" title="">Home</a></li>
+            <li><a href="./about.html" title="">About this project</a></li>
+            <li><a href="./contact.html" title="">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="hero-full-container background-image-container">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="section-container-spacer text-center">
+            <h1 class="h2">Recommendations</h1>
+          </div>
+
+          <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+              <div class="card-container card-container-lg" style="color: blue;">
+                <h3>Input image</h3>
+                <p style="font-size: 20px;">Please input your image. We will recommend fashion styles according to the images you provide.</p>
+                <form id="uploadForm" action="/submit_image_form" method="POST" enctype="multipart/form-data">
+                  <input type="file" id="imageInput" name="image" accept="image/*">
+                  <a href="./capture.html" class="btn btn-primary">Take a photo</a>
+                  <input type="button" value="Upload" onclick="uploadImage()">
+                  
+                </form>
+              </div>
+            </div>
+          </div>
+          <div id="contentContainer"></div> <!-- Container for server response -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer-container text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12">
+          <p class="text-muted"><a href="./index.html">Home</a> | <a href="./about.html">About this project</a> | <a href="./contact.html">Contact</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function uploadImage() {
+      var form = document.getElementById("uploadForm");
+      var formData = new FormData(form);
+
+      // Make an AJAX request to the server
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/submit_image_form");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            // Handle the response from the server
+            var response = xhr.responseText;
+            document.getElementById("contentContainer").innerHTML = response;
+          } else {
+            // Handle errors or no response received
+            alert("Error: No response received from the server.");
+          }
+        }
+      };
+      xhr.send(formData);
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Result</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .processed-images-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+      }
+
+      .processed-image {
+        margin-right: 10px;
+        margin-bottom: 10px;
+      }
+
+      .recommendation {
+        margin-bottom: 20px;
+        border: 1px solid #ffff;
+        background-color: #ffff;
+        padding: 20px;
+        border-radius: 4px;+
+      }
+
+      .recommendation h3 {
+        color: #333;
+        margin-top: 0;
+        background-color: #ffff;
+        margin-bottom: 10px;
+      }
+      .recommendation h2 {
+        background-color: #ffff;
+        border: 1px solid #ffff;
+
+      }
+      .recommendation p {
+        color: #777;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      .recommendation a {
+        display: inline-block;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 4px;
+      }
+
+      .recommendation a:hover {
+        background-color: #555;
+      }
+    
+      .resize {
+        width: 100px;
+        height: 100px;
+    }
+    </style>
+  </head>
+  <body style="background-color: #ffe4c4">
+    
+
+    <h2>Similar Recommendations</h2>
+    <h3>Your clothing style is: {{ predicted_label }}</h3>
+    <h3> You might want to try these clothing items based on your style. </h3>
+
+    {% for recommendation in recommendations %}
+    <div class="recommendation">
+        <h3>{{ recommendation['image_title'] }}</h3>
+        <p>{{ recommendation['description'] }}</p>
+        
+        {% if loop.index == 1 %}
+            <img src="../static/assets/images/shirticon.png" alt="Image 1" class="resize">
+        {% elif loop.index == 2 %}
+            <img src="../static/assets/images/pantsicon.png" alt="Image 2" class="resize">
+        {% elif loop.index == 3 %}
+            <img src="../static/assets/images/jacketicon.png" alt="Image 3" class="resize">
+        {% endif %}
+        <a href="{{ recommendation['page_url'] }}">Go to Recommendation</a>
+    </div>
+{% endfor %}
+
+</body>
+
+</html>

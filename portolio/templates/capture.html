@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width,initial-scale=1" name="viewport">
+  <meta content="description" name="description">
+  <meta name="google" content="notranslate" />
+  <meta content="Mashup templates have been developed by Orson.io team" name="author">
+
+  <!-- Disable tap highlight on IE -->
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <title>Capture Image</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link href="../static/main.3f6952e4.css" rel="stylesheet">
+  <link rel="apple-touch-icon" sizes="180x180" href="../static/assets/apple-icon-180x180.png">
+
+  <link rel="shortcut icon" href="/static/bat.ico">
+</head>
+
+<body style="background-color: #F5DEB3;">
+<div id="site-border-left"></div>
+  <div id="site-border-right"></div>
+  <div id="site-border-top"></div>
+  <div id="site-border-bottom"></div>
+
+  <!-- Add your content of header -->
+  <header>
+    <nav class="navbar navbar-fixed-top navbar-default">
+      <div class="container">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="./index.html" title="">Home</a></li>
+            <li><a href="./about.html" title="">About this project</a></li>
+            <li><a href="./contact.html" title="">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="hero-full-container background-image-container">
+  <div class="container">
+    <div style="display: flex; align-items: center;">
+      <div id="videoContainer" style="margin-right: 10px;">
+        <video id="videoElement" width="500" height="400" autoplay></video>
+      </div>
+      <div id="imageContainer" style="display: none;">
+        <h3 style="margin-top: 40px;">Captured Image:</h3>
+        <img id="capturedImage" width="400" height="250" alt="Captured Image">
+      </div>
+    </div>
+    <div style="display: flex; align-items: center;">
+      <button id="captureButton" style="margin-right: 10px;">Capture Image</button>
+      <form id="uploadForm" action="/submit_captured_image_form" method="POST" enctype="multipart/form-data">
+        <input type="button" value="Upload" onclick="uploadImage()">
+      </form>
+    </div>
+
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <div id="contentContainer"></div> <!-- Container for server response -->
+  </div>
+</div>
+
+
+<script>
+    // JavaScript code
+
+    // Define a variable to hold the captured image Blob
+    var capturedBlob = null;
+
+    // Get video element and check browser compatibility
+    var video = document.getElementById('videoElement');
+    if (navigator.mediaDevices.getUserMedia) {
+      // Access the webcam stream
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+          video.srcObject = stream;
+        })
+        .catch(function (error) {
+          console.log("Error accessing webcam: ", error);
+        });
+    }
+
+    var captureButton = document.getElementById('captureButton');
+    captureButton.addEventListener('click', function () {
+      var canvas = document.getElementById('canvas');
+      var context = canvas.getContext('2d');
+      var videoWidth = video.videoWidth;
+      var videoHeight = video.videoHeight;
+      canvas.width = videoWidth;
+      canvas.height = videoHeight;
+      context.drawImage(video, 0, 0, videoWidth, videoHeight);
+
+      // Convert canvas image to a Blob
+      canvas.toBlob(function (blob) {
+        capturedBlob = blob;
+        var capturedImage = document.getElementById('capturedImage');
+        capturedImage.src = URL.createObjectURL(blob);
+        document.getElementById('imageContainer').style.display = 'block';
+      });
+    });
+
+    function uploadImage() {
+      if (capturedBlob) {
+        // Create a FormData object to send the image file
+        var formData = new FormData();
+        formData.append('image', capturedBlob, 'captured_image.png');
+
+        // Make an AJAX request to the server
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/submit_captured_image_form");
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              // Handle the response from the server
+              var response = xhr.responseText;
+              document.getElementById("contentContainer").innerHTML = response;
+            } else {
+              // Handle errors or no response received
+              alert("Error: No response received from the server.");
+            }
+          }
+        };
+        xhr.send(formData);
+      } else {
+        alert("Error: No captured image available.");
+      }
+    }
+  </script>
+</body>
+
+</html>
